@@ -39,7 +39,7 @@ cd ../fabric-samples/
 export PATH=$PATH:$(pwd)/bin
 ```
 
-## Generating criptographic materials
+## Generating cryptographic materials
 
 The command below will generate the necessary cryptographic materials (e.g. certificates), as it makes things less conplicated for a simple MVP.
 ```

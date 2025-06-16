@@ -1,0 +1,27 @@
+OrdererOrgs:
+  - Name: OrdererOrg
+    Domain: orderer.example.com
+    EnableNodeOUs: true #not from original
+    Specs:
+      - Hostname: orderer1
+
+PeerOrgs:
+  - Name: CustodianOrg
+    Domain: custodian.example.com
+    EnableNodeOUs: true #not from original
+    Template:
+      Count: 1
+      SANS: #not from original
+        - peer1.custodian.example.com #not from original
+    Users:
+      Count: 1
+
+  - Name: ProsecutorOrg
+    Domain: prosecutor.example.com
+    EnableNodeOUs: true #not from original
+    Template:
+      Count: 1
+      SANS: #not from original
+        - peer1.prosecutor.example.com #not from original
+    Users:
+      Count: 1

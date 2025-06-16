@@ -1,0 +1,167 @@
+################################################################################
+#  Capabilities Section
+################################################################################
+Capabilities:
+  Channel: &ChannelCapabilities
+    V2_0: true
+
+  Orderer: &OrdererCapabilities
+    V2_0: true
+
+  Application: &ApplicationCapabilities
+    V2_0: true
+
+################################################################################
+#  ChannelDefaults
+################################################################################
+Channel: &ChannelDefaults
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+    Capabilities:
+        <<: *ChannelCapabilities
+
+################################################################################
+#  OrdererDefaults
+################################################################################
+Orderer: &OrdererDefaults
+    OrdererType: etcdraft
+    Addresses:
+        - orderer1.orderer.example.com:7050
+
+    BatchTimeout: 250ms
+    BatchSize:
+        MaxMessageCount: 50
+        AbsoluteMaxBytes: 100 MB
+        PreferredMaxBytes: 1 MB
+
+    MaxChannels: 0
+    EtcdRaft:
+        Consenters:
+            - Host: orderer1.orderer.example.com
+              Port: 7050
+              ClientTLSCert: ../organizations/ordererOrganizations/orderer.example.com/orderers/orderer1.orderer.example.com/tls/server.crt
+              ServerTLSCert: ../organizations/ordererOrganizations/orderer.example.com/orderers/orderer1.orderer.example.com/tls/server.crt
+
+################################################################################
+#  Organizations Section
+################################################################################
+Organizations:
+
+  - &OrdererOrg
+    Name: OrdererOrg
+    ID: OrdererMSP
+    MSPDir: ../organizations/ordererOrganizations/orderer.example.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('OrdererMSP.admin')"
+
+  - &CustodianOrg
+    Name: CustodianOrg
+    ID: CustodianMSP
+    MSPDir: ../organizations/peerOrganizations/custodian.example.com/msp
+    AnchorPeers:
+      - Host: peer0.custodian.example.com
+        Port: 7051
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('CustodianMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('CustodianMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('CustodianMSP.admin')"
+
+  - &ProsecutorOrg
+    Name: ProsecutorOrg
+    ID: ProsecutorMSP
+    MSPDir: ../organizations/peerOrganizations/prosecutor.example.com/msp
+    AnchorPeers:
+      - Host: peer0.prosecutor.example.com
+        Port: 9051
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('ProsecutorMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('ProsecutorMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('ProsecutorMSP.admin')"
+
+
+
+
+################################################################################
+#  Profiles
+################################################################################
+Profiles:
+
+  ################################################################################
+  #  OrdererGenesis Profile
+  ################################################################################
+  OrdererGenesis:
+    <<: *ChannelDefaults
+    Orderer:
+      <<: *OrdererDefaults
+      Organizations:
+        - *OrdererOrg
+      Capabilities:
+        <<: *OrdererCapabilities
+      Policies:
+        Readers:
+          Type: ImplicitMeta
+          Rule: "ANY Readers"
+        Writers:
+          Type: ImplicitMeta
+          Rule: "ANY Writers"
+        Admins:
+          Type: ImplicitMeta
+          Rule: "MAJORITY Admins"
+        BlockValidation:
+          Type: ImplicitMeta
+          Rule: "ANY Writers"
+    Consortiums:
+      LawConsortium:
+        Organizations:
+          - *CustodianOrg
+          - *ProsecutorOrg
+
+  ################################################################################
+  #  Application Profile for the Evidence Channel
+  ################################################################################
+  EvidenceChannel:
+    <<: *ChannelDefaults
+    Capabilities:
+      <<: *ApplicationCapabilities
+    Policies:
+        Readers:
+          Type: ImplicitMeta
+          Rule: "ANY Readers"
+        Writers:
+          Type: ImplicitMeta
+          Rule: "ANY Writers"
+        Admins:
+          Type: ImplicitMeta
+          Rule: "MAJORITY Admins"
+        BlockValidation:
+          Type: ImplicitMeta
+          Rule: "ANY Writers"
+    Consortium: SampleConsortium

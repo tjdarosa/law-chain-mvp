@@ -15,19 +15,43 @@ tar | 1.34
 go | 1.18.1
 nodejs | 12.22.9
  
+
 - It is also needed to download and install Hyperledger Fabric binaries (v2.5):
 
-Donwload:
+
+Donwload (it is not needed to download anymore as ```install-fabric.sh``` file was added on the project):
 ```
 curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh && chmod +x install-fabric.sh
 ```
+
+
 Install:
 ```
 ./install-fabric.sh -f 2.5.13 -c 1.5.15
 ```
 
 
+After installing it is needed to add fabric configurations and fabric binaries to the path:
+```
+cd ./law-chain-mvp-project
+export FABRIC_CFG_PATH=$(pwd)/config
+cd ../fabric-samples/
+export PATH=$PATH:$(pwd)/bin
+```
 
+## Generating criptographic materials
+
+The command below will generate the necessary cryptographic materials (e.g. certificates), as it makes things less conplicated for a simple MVP.
+```
+cryptogen generate --config=./config/crypto-config.yaml --output=organizations
+```
+
+## Genetaring genesis block
+```
+configtxgen -profile OrdererGenesis -channelID system-channel -outputBlock ./config/genesis.block
+```
+
+# NOTES
 
 ## PHASE 1: Project Planning & Structure
 

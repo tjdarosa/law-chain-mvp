@@ -164,4 +164,9 @@ Profiles:
         BlockValidation:
           Type: ImplicitMeta
           Rule: "ANY Writers"
-    Consortium: SampleConsortium
+    Application:
+      <<: *ChannelDefaults
+      Organizations:
+          - *CustodianOrg
+          - *ProsecutorOrg
+    Consortium: LawConsortium

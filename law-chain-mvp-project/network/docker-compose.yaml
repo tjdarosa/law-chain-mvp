@@ -1,0 +1,41 @@
+version: '2.4'
+
+services:
+
+  orderer.example.com:
+    image: hyperledger/fabric-orderer:2.5
+    environment:
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+    volumes:
+      - ./organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp
+      - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/genesis.block
+    ports:
+      - 7050:7050
+
+  peer0.custodian.example.com:
+    image: hyperledger/fabric-peer:2.5
+    environment:
+      - CORE_PEER_ID=peer0.custodian.example.com
+      - CORE_PEER_ADDRESS=peer0.custodian.example.com:7051
+      - CORE_PEER_LOCALMSPID=CustodianMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+    volumes:
+      - ./organizations/peerOrganizations/custodian.example.com/peers/peer0.custodian.example.com/msp:/etc/hyperledger/fabric/msp
+    ports:
+      - 7051:7051
+
+  peer0.prosecutor.example.com:
+    image: hyperledger/fabric-peer:2.5
+    environment:
+      - CORE_PEER_ID=peer0.prosecutor.example.com
+      - CORE_PEER_ADDRESS=peer0.prosecutor.example.com:9051
+      - CORE_PEER_LOCALMSPID=ProsecutorMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+    volumes:
+      - ./organizations/peerOrganizations/prosecutor.example.com/peers/peer0.prosecutor.example.com/msp:/etc/hyperledger/fabric/msp
+    ports:
+      - 9051:9051

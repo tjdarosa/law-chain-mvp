@@ -4,6 +4,8 @@ MVP for a business proposal designed in "blockchain technologies and cryptocurre
 
 ## Requirements
 
+__*NOTE: This project is based on Ubuntu 22.04. The requirements and steps specified below were not tested in other OSes and may not work on them.*__
+
 Requirement | Version
 --- | --- 
 docker | 28.2.2 
@@ -15,8 +17,7 @@ tar | 1.34
 go | 1.18.1
 nodejs | 12.22.9
  
-
-- It is also needed to download and install Hyperledger Fabric binaries (v2.5):
+## Downloading and installing Hyperledger Fabric binaries (v2.5):
 
 
 Donwload (it is not needed to download anymore as ```install-fabric.sh``` file was added on the project):
@@ -41,15 +42,42 @@ export PATH=$PATH:$(pwd)/bin
 
 ## Generating cryptographic materials
 
-The command below will generate the necessary cryptographic materials (e.g. certificates), as it makes things less conplicated for a simple MVP.
+The command below will generate the necessary cryptographic materials (e.g. certificates), as it makes things less complicated for MVP.
 ```
+cd ../law-chain-mvp-project
 cryptogen generate --config=./config/crypto-config.yaml --output=organizations
 ```
 
-## Genetaring genesis block
+## Generating genesis block
 ```
-configtxgen -profile OrdererGenesis -channelID system-channel -outputBlock ./config/genesis.block
+mkdir channel-artifacts
+configtxgen -profile OrdererGenesis -channelID system-channel -outputBlock ./channel-artifacts/genesis.block
 ```
+
+## Generating channel creation transaction file
+```
+configtxgen -profile EvidenceChannel -outputCreateChannelTx ./channel-artifacts/mychannel.tx -channelID mychannel
+```
+
+## Generating anchor peers update transaction files
+In fabric, an ```anchor peer``` is a designated peer in an organization that other peers (from different orgs) can connect to. Anchor peers are how organizations discover and communicate with each other within a channel. Without this, each org’s peers can only communicate within their own org, not across orgs.
+```
+configtxgen -profile EvidenceChannel -outputAnchorPeersUpdate ./channel-artifacts/CustodianOrgAnchors.tx -channelID mychannel -asOrg CustodianOrg
+configtxgen -profile EvidenceChannel -outputAnchorPeersUpdate ./channel-artifacts/ProsecutorOrgAnchors.tx -channelID mychannel -asOrg ProsecutorOrg
+```
+
+## Starting blockchain network components (orderer and peers)
+```
+docker-compose -f ./network/docker-compose.yaml up -d
+```
+
+## Giving permission to execute the ```create-channel``` script and executing it
+```
+chmod +x ./scripts/create-channel.sh
+./scripts/create-channel.sh
+```
+
+
 
 # NOTES
 
@@ -72,8 +100,5 @@ Ordering Service:
 
 Peer Nodes:
 - 1–2 peers per org (minimum: 1).
-
-
-
 
 

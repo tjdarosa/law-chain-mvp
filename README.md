@@ -17,7 +17,7 @@ tar | 1.34
 go | 1.18.1
 nodejs | 12.22.9
  
-## Downloading and installing Hyperledger Fabric binaries (v2.5):
+## 1 - Downloading and installing Hyperledger Fabric binaries (v2.5):
 
 
 Donwload (it is not needed to download anymore as ```install-fabric.sh``` file was added on the project):
@@ -25,59 +25,40 @@ Donwload (it is not needed to download anymore as ```install-fabric.sh``` file w
 curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh && chmod +x install-fabric.sh
 ```
 
-
 Install:
 ```
 ./install-fabric.sh -f 2.5.13 -c 1.5.15
 ```
 
+## 2 - Execute the ```setup-network.sh``` script
+```
+./scripts/setup-network.sh
+```
+This script will:
+- Add fabric configurations and fabric binaries to the path
+- Generate cryptographic materials (using ```cryptogen```)
+- Generate genesis block (using ```configtxgen```)
+- Generate channel creation transaction file (using ```configtxgen```)
+- Generate anchor peers update transaction files (using ```configtxgen```). In fabric, an ```anchor peer``` is a designated peer in an organization that other peers (from different orgs) can connect to. Anchor peers are how organizations discover and communicate with each other within a channel. Without this, each org’s peers can only communicate within their own org, not across orgs.
 
-After installing it is needed to add fabric configurations and fabric binaries to the path:
-```
-cd ./law-chain-mvp-project
-export FABRIC_CFG_PATH=$(pwd)/config
-cd ../fabric-samples/
-export PATH=$PATH:$(pwd)/bin
-```
 
-## Generating cryptographic materials
-
-The command below will generate the necessary cryptographic materials (e.g. certificates), as it makes things less complicated for MVP.
-```
-cd ../law-chain-mvp-project
-cryptogen generate --config=./config/crypto-config.yaml --output=organizations
-```
-
-## Generating genesis block
-```
-mkdir channel-artifacts
-configtxgen -profile OrdererGenesis -channelID system-channel -outputBlock ./channel-artifacts/genesis.block
-```
-
-## Generating channel creation transaction file
-```
-configtxgen -profile EvidenceChannel -outputCreateChannelTx ./channel-artifacts/mychannel.tx -channelID mychannel
-```
-
-## Generating anchor peers update transaction files
-In fabric, an ```anchor peer``` is a designated peer in an organization that other peers (from different orgs) can connect to. Anchor peers are how organizations discover and communicate with each other within a channel. Without this, each org’s peers can only communicate within their own org, not across orgs.
-```
-configtxgen -profile EvidenceChannel -outputAnchorPeersUpdate ./channel-artifacts/CustodianOrgAnchors.tx -channelID mychannel -asOrg CustodianOrg
-configtxgen -profile EvidenceChannel -outputAnchorPeersUpdate ./channel-artifacts/ProsecutorOrgAnchors.tx -channelID mychannel -asOrg ProsecutorOrg
-```
-
-## Starting blockchain network components (orderer and peers)
+## 3 - Starting blockchain network components (orderer and peers)
 ```
 docker-compose -f ./network/docker-compose.yaml up -d
 ```
 
-## Giving permission to execute the ```create-channel``` script and executing it
+## 4 - Entering ```fabric-cli``` container and creating network
 ```
-chmod +x ./scripts/create-channel.sh
-./scripts/create-channel.sh
+docker exec -it fabric-cli bash
+./scripts/create-network.sh
 ```
+You can get detach the container from your terminal by using the ```exit``` command
 
-
+## 5 - Removing network (once outside fabric-cli container)
+```
+./scripts/remove-network.sh
+```
+Note: if you want to start the blockchain network components again, go back to step 3.
 
 # NOTES
 

@@ -1,27 +1,49 @@
 OrdererOrgs:
   - Name: OrdererOrg
     Domain: orderer.example.com
-    EnableNodeOUs: true #not from original
+    EnableNodeOUs: true
     Specs:
-      - Hostname: orderer1
+      - Hostname: orderer1  # Evidence Custodian
+      - Hostname: orderer2  # Prosecutor
+      - Hostname: orderer3  # Optional neutral (we can assign one arbitrarily)
 
 PeerOrgs:
-  - Name: CustodianOrg
-    Domain: custodian.example.com
-    EnableNodeOUs: true #not from original
+  - Name: CollectingOfficerOrg
+    Domain: collectingofficer.example.com
+    EnableNodeOUs: true
     Template:
       Count: 1
-      SANS: #not from original
-        - peer1.custodian.example.com #not from original
+    Users:
+      Count: 1
+
+  - Name: EvidenceCustodianOrg
+    Domain: evidencecustodian.example.com
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+    Users:
+      Count: 1
+
+  - Name: ForensicAnalystOrg
+    Domain: forensicanalyst.example.com
+    EnableNodeOUs: true
+    Template:
+      Count: 1
     Users:
       Count: 1
 
   - Name: ProsecutorOrg
     Domain: prosecutor.example.com
-    EnableNodeOUs: true #not from original
+    EnableNodeOUs: true
     Template:
       Count: 1
-      SANS: #not from original
-        - peer1.prosecutor.example.com #not from original
     Users:
       Count: 1
+
+  - Name: CourtroomPersonnelOrg
+    Domain: courtroom.example.com
+    EnableNodeOUs: true
+    Template:
+      Count: 0  # No peers
+    Users:
+      Count: 1  # Just for certificate/identity to access via SDK

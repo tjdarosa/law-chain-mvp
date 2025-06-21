@@ -2,7 +2,9 @@ version: '2.4'
 
 services:
 
-  orderer.example.com:
+  # === ORDERERS (RAFT) ===
+  orderer1.example.com:
+    container_name: orderer1.example.com
     image: hyperledger/fabric-orderer:2.5
     environment:
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -10,32 +12,160 @@ services:
       - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/genesis.block
       - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_LOGLEVEL=info
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_NODE_TLS_ENABLED=false
+      # RAFT CLUSTER CONFIG
+      - ORDERER_GENERAL_CLUSTER_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_CLUSTER_LISTENPORT=9090
+      - ORDERER_GENERAL_CLUSTER_SERVERCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_SERVERPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
     volumes:
-      - ./organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp
-      - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/genesis.block
+      - ../organizations/ordererOrganizations/orderer.example.com/orderers/orderer1.orderer.example.com/msp:/var/hyperledger/orderer/msp
+      - ../organizations/ordererOrganizations/orderer.example.com/orderers/orderer1.orderer.example.com/tls:/var/hyperledger/orderer/tls
+      - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/genesis.block
     ports:
       - 7050:7050
 
-  peer0.custodian.example.com:
+  orderer2.example.com:
+    container_name: orderer2.example.com
+    image: hyperledger/fabric-orderer:2.5
+    environment:
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_LOGLEVEL=info
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_NODE_TLS_ENABLED=false
+      # RAFT CLUSTER CONFIG
+      - ORDERER_GENERAL_CLUSTER_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_CLUSTER_LISTENPORT=9090
+      - ORDERER_GENERAL_CLUSTER_SERVERCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_SERVERPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+    volumes:
+      - ../organizations/ordererOrganizations/orderer.example.com/orderers/orderer2.orderer.example.com/msp:/var/hyperledger/orderer/msp
+      - ../organizations/ordererOrganizations/orderer.example.com/orderers/orderer2.orderer.example.com/tls:/var/hyperledger/orderer/tls
+      - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/genesis.block
+    ports:
+      - 8050:7050
+
+  orderer3.example.com:
+    container_name: orderer3.example.com
+    image: hyperledger/fabric-orderer:2.5
+    environment:
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_LOGLEVEL=info
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_NODE_TLS_ENABLED=false
+      # RAFT CLUSTER CONFIG
+      - ORDERER_GENERAL_CLUSTER_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_CLUSTER_LISTENPORT=9090
+      - ORDERER_GENERAL_CLUSTER_SERVERCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_SERVERPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+    volumes:
+      - ../organizations/ordererOrganizations/orderer.example.com/orderers/orderer3.orderer.example.com/msp:/var/hyperledger/orderer/msp
+      - ../organizations/ordererOrganizations/orderer.example.com/orderers/orderer3.orderer.example.com/tls:/var/hyperledger/orderer/tls
+      - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/genesis.block
+    ports:
+      - 9050:7050
+
+  # === PEERS ===
+
+  peer0.collectingofficer.example.com:
+    container_name: peer0.collectingofficer.example.com
     image: hyperledger/fabric-peer:2.5
     environment:
-      - CORE_PEER_ID=peer0.custodian.example.com
-      - CORE_PEER_ADDRESS=peer0.custodian.example.com:7051
-      - CORE_PEER_LOCALMSPID=CustodianMSP
+      - CORE_PEER_ID=peer0.collectingofficer.example.com
+      - CORE_PEER_ADDRESS=peer0.collectingofficer.example.com:7051
+      - CORE_PEER_LOCALMSPID=CollectingOfficerMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
     volumes:
-      - ./organizations/peerOrganizations/custodian.example.com/peers/peer0.custodian.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/collectingofficer.example.com/peers/peer0.collectingofficer.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/collectingofficer.example.com/peers/peer0.collectingofficer.example.com/tls:/etc/hyperledger/fabric/tls
     ports:
       - 7051:7051
 
+  peer0.evidencecustodian.example.com:
+    container_name: peer0.evidencecustodian.example.com
+    image: hyperledger/fabric-peer:2.5
+    environment:
+      - CORE_PEER_ID=peer0.evidencecustodian.example.com
+      - CORE_PEER_ADDRESS=peer0.evidencecustodian.example.com:8051
+      - CORE_PEER_LOCALMSPID=EvidenceCustodianMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+    volumes:
+      - ../organizations/peerOrganizations/evidencecustodian.example.com/peers/peer0.evidencecustodian.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/evidencecustodian.example.com/peers/peer0.evidencecustodian.example.com/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 8051:8051
+
+  peer0.forensicanalyst.example.com:
+    container_name: peer0.forensicanalyst.example.com
+    image: hyperledger/fabric-peer:2.5
+    environment:
+      - CORE_PEER_ID=peer0.forensicanalyst.example.com
+      - CORE_PEER_ADDRESS=peer0.forensicanalyst.example.com:9051
+      - CORE_PEER_LOCALMSPID=ForensicAnalystMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+    volumes:
+      - ../organizations/peerOrganizations/forensicanalyst.example.com/peers/peer0.forensicanalyst.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/forensicanalyst.example.com/peers/peer0.forensicanalyst.example.com/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 9051:9051
+
   peer0.prosecutor.example.com:
+    container_name: peer0.prosecutor.example.com
     image: hyperledger/fabric-peer:2.5
     environment:
       - CORE_PEER_ID=peer0.prosecutor.example.com
-      - CORE_PEER_ADDRESS=peer0.prosecutor.example.com:9051
+      - CORE_PEER_ADDRESS=peer0.prosecutor.example.com:10051
       - CORE_PEER_LOCALMSPID=ProsecutorMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
     volumes:
-      - ./organizations/peerOrganizations/prosecutor.example.com/peers/peer0.prosecutor.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/prosecutor.example.com/peers/peer0.prosecutor.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/prosecutor.example.com/peers/peer0.prosecutor.example.com/tls:/etc/hyperledger/fabric/tls
     ports:
-      - 9051:9051
+      - 10051:7051
+
+  fabric-cli:
+    container_name: fabric-cli
+    image: hyperledger/fabric-tools:2.5
+    tty: true
+    stdin_open: true
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_ID=fabric-cli
+      - CORE_PEER_ADDRESS=peer0.collectingofficer.example.com:7051
+      - CORE_PEER_LOCALMSPID=CollectingOfficerOrgMSP
+      - CORE_PEER_TLS_ENABLED=false
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/collectingofficer.example.com/users/Admin@collectingofficer.example.com/msp
+    volumes:
+      - /var/run/:/host/var/run/
+      - ../organizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+      - ../scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+      - ../channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    depends_on:
+      - peer0.collectingofficer.example.com
+      - peer0.evidencecustodian.example.com
+      - peer0.forensicanalyst.example.com
+      - peer0.prosecutor.example.com
+
+networks:
+  default:
+    name: fabric_network
+    driver: bridge

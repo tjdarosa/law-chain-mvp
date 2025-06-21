@@ -1,27 +1,60 @@
 #!/bin/bash
 
-export CORE_PEER_LOCALMSPID="CustodianMSP"
-export CORE_PEER_ADDRESS=peer0.custodian.example.com:7051
-export CORE_PEER_MSPCONFIGPATH=organizations/peerOrganizations/custodian.example.com/users/Admin@custodian.example.com/msp
-export FABRIC_CFG_PATH=$PWD/config
+# CONFIGURATION
+CHANNEL_NAME="lawchannel"
+ORDERER=orderer1.example.com:7050
 
-# Create channel
-peer channel create -o orderer.example.com:7050 \
-  -c mychannel -f ./channel-artifacts/mychannel.tx \
-  --outputBlock ./channel-artifacts/mychannel.block
+# Map logical org names to domain names
+declare -A ORG_DOMAINS
+ORG_DOMAINS=(
+  [CollectingOfficerOrg]="collectingofficer.example.com"
+  [EvidenceCustodianOrg]="evidencecustodian.example.com"
+  [ForensicAnalystOrg]="forensicanalyst.example.com"
+  [ProsecutorOrg]="prosecutor.example.com"
+)
 
-# Join peer0.org1
-peer channel join -b ./channel-artifacts/mychannel.block
+# Set peer environment
+setGlobalsForPeer0() {
+  ORG_NAME=$1
+  DOMAIN=${ORG_DOMAINS[$ORG_NAME]}
 
-# Update anchor peers
-peer channel update -o orderer.example.com:7050 -c mychannel \
-  -f ./channel-artifacts/CustodianOrgAnchors.tx
+  export CORE_PEER_LOCALMSPID="${ORG_NAME}MSP"
+  export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/${DOMAIN}/users/Admin@${DOMAIN}/msp
+  export CORE_PEER_ADDRESS=peer0.${DOMAIN}:7051
+  export CORE_PEER_TLS_ENABLED=false
+}
 
-# Now set peer0.prosecutor context and repeat
-export CORE_PEER_LOCALMSPID="ProsecutorMSP"
-export CORE_PEER_ADDRESS=peer0.prosecutor.example.com:9051
-export CORE_PEER_MSPCONFIGPATH=crypto-config/peerOrganizations/prosecutor.example.com/users/Admin@prosecutor.example.com/msp
+echo "🔧 Creating channel..."
+peer channel create \
+  -o $ORDERER \
+  -c $CHANNEL_NAME \
+  -f ./channel-artifacts/${CHANNEL_NAME}.tx \
+  --outputBlock ./channel-artifacts/${CHANNEL_NAME}.block
 
-peer channel join -b ./channel-artifacts/mychannel.block
-peer channel update -o orderer.example.com:7050 -c mychannel \
-  -f ./channel-artifacts/ProsecutorOrgAnchors.tx
+joinChannel() {
+  ORG=$1
+  echo "🚀 Joining peer0 of $ORG to channel..."
+  setGlobalsForPeer0 $ORG
+  peer channel join -b ./channel-artifacts/${CHANNEL_NAME}.block
+}
+
+updateAnchorPeer() {
+  ORG=$1
+  echo "📡 Updating anchor peers for $ORG..."
+  setGlobalsForPeer0 $ORG
+  peer channel update \
+    -o $ORDERER \
+    -c $CHANNEL_NAME \
+    -f ./channel-artifacts/${ORG}Anchors.tx
+}
+
+# List your logical org names (matching ORG_DOMAINS keys)
+ORGS=("CollectingOfficerOrg" "EvidenceCustodianOrg" "ForensicAnalystOrg" "ProsecutorOrg")
+
+for ORG in "${ORGS[@]}"; do
+  joinChannel $ORG
+done
+
+for ORG in "${ORGS[@]}"; do
+  updateAnchorPeer $ORG
+done

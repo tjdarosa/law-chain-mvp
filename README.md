@@ -59,8 +59,8 @@ Install:
 ```docker ps -a```
 
 ### Check container logs
-```docker logs <container_name>```
-running with ```-f``` will keep the logs running.
+```docker logs <container_name>```  
+Executing with ```-f``` will keep the logs running.
 
 ### Enter a container to debug/test if needed
 ```docker exec -it <container_name> bash```

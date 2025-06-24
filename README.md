@@ -34,26 +34,11 @@ Install:
 
 ```cd ./law-chain-mvp-project/test-network``` 
 
-## 3 - Start the network with the two first organizations (Evidence Custodian and Collecting Officer) + orderer
+## 3 - Start the network with the all organizations + orderer and create the channel "law-channel"
 
-```./network.sh up``` 
+```chmod +x ./scripts/setup_network.sh && ./scripts/setup_network.sh``` 
 
-## 4 - Create the channel "law-channel"
-
-```./network.sh createChannel -c law-channel```
-
-## 5 - Add the remaining three organizations to the network (because of gambiarra, start the orgs in the same order as here)
-
-### Forensic Analyst
-```cd ./addForensicAnalyst/ && ./addForensicAnalyst.sh up -c law-channel``` 
-
-### Prosecutor
-```cd ../addProsecutor/ && ./addProsecutor.sh up -c law-channel``` 
-
-### Courtroom Personnel
-```cd ../addCourtroomPersonnel/ && ./addCourtroomPersonnel.sh up -c law-channel``` 
-
-## 6 - Checking containers info
+## 4 - Checking containers info
 
 ### Which containers were created and are up
 ```docker ps -a```
@@ -65,5 +50,5 @@ Executing with ```-f``` will keep the logs running.
 ### Enter a container to debug/test if needed
 ```docker exec -it <container_name> bash```
 
-## 7 - Take the network down
+## 5 - Take the network down
 ```./network.sh down```

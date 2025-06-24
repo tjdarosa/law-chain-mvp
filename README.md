@@ -53,5 +53,17 @@ Install:
 ### Courtroom Personnel
 ```cd ../addCourtroomPersonnel/ && ./addCourtroomPersonnel.sh up -c law-channel``` 
 
-## 6 - Take the network down
-```./network.sh down``` 
+## 6 - Checking containers info
+
+### Which containers were created and are up
+```docker ps -a```
+
+### Check container logs
+```docker logs <container_name>```
+running with ```-f``` will keep the logs running.
+
+### Enter a container to debug/test if needed
+```docker exec -it <container_name> bash```
+
+## 7 - Take the network down
+```./network.sh down```

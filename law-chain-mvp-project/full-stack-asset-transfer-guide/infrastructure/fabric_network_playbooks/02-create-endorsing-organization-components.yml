@@ -1,0 +1,18 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Create components for an endorsing organization
+  hosts: localhost
+  vars:
+    state: present
+    organization_name: "{{ collectingofficer_name }}"
+    organization_msp_id: "{{ collectingofficer_msp_id }}"
+    ca_name: "{{ collectingofficer_ca_name }}"
+    peer_name: "{{ collectingofficer_peer_name }}"
+    wallet: "/_cfg"    
+  vars_files:
+    - /_cfg/fabric-common-vars.yml
+    - /_cfg/fabric-collectingofficer-vars.yml
+  roles:
+    - ibm.blockchain_platform.endorsing_organization

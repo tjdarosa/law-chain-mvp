@@ -1,0 +1,38 @@
+[
+ {
+   "name": "assetCollection",
+   "policy": "OR('CollectingOfficerMSP.member', 'EvidenceCustodianMSP.member')",
+   "requiredPeerCount": 1,
+   "maxPeerCount": 1,
+   "blockToLive":1000000,
+   "memberOnlyRead": true,
+   "memberOnlyWrite": true,
+   "endorsementPolicy": {
+    "signaturePolicy":"OR('CollectingOfficerMSP.member','EvidenceCustodianMSP.member')"
+  }   
+},
+ {
+   "name": "CollectingOfficerMSPPrivateCollection",
+   "policy": "OR('CollectingOfficerMSP.member')",
+   "requiredPeerCount": 0,
+   "maxPeerCount": 1,
+   "blockToLive":3,
+   "memberOnlyRead": true,
+   "memberOnlyWrite": false,
+   "endorsementPolicy": {
+     "signaturePolicy": "OR('CollectingOfficerMSP.member')"
+   }
+ },
+ {
+   "name": "EvidenceCustodianMSPPrivateCollection",
+   "policy": "OR('EvidenceCustodianMSP.member')",
+   "requiredPeerCount": 0,
+   "maxPeerCount": 1,
+   "blockToLive":3,
+   "memberOnlyRead": true,
+   "memberOnlyWrite": false,
+   "endorsementPolicy": {
+     "signaturePolicy": "OR('EvidenceCustodianMSP.member')"
+   }
+  }
+]

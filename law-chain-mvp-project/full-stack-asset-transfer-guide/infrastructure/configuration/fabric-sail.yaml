@@ -1,0 +1,36 @@
+network:
+  name: asset-transfer-basic
+  domain: localho.st
+  namespace: test-network
+
+  organizations:
+    - name: org0
+      orderers:
+        - name: org0-orderers
+          count: 3
+
+    - name: collectingofficer
+      peers:
+        - name: collectingofficer-peer1
+          anchor: true
+        - name: collectingofficer-peer2
+
+    - name: evidencecustodian
+      peers:
+        - name: evidencecustodian-peer1
+          anchor: true
+        - name: evidencecustodian-peer2
+
+  channels:
+    - name: mychannel
+      organizations:
+        - collectingofficer
+        - evidencecustodian
+
+  chaincode:
+    - name: asset-transfer
+      version: v0.1.1
+      package: https://github.com/hyperledgendary/asset-transfer-basic/releases/download/v0.1.1/asset-transfer-basic-v0.1.1.tgz
+      channels:
+        - name: mychannel
+          policy: "OR('collectingofficer.member', 'evidencecustodian.member')"

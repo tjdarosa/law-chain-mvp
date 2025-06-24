@@ -1,0 +1,17 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+ca_admin_enrollment_id: admin
+ca_admin_enrollment_secret: adminpw
+organization_admin_enrollment_id: evidencecustodianadmin
+organization_admin_enrollment_secret: evidencecustodianadminpw
+peer_enrollment_id: evidencecustodianpeer
+peer_enrollment_secret: evidencecustodianpeerpw
+application_enrollment_id: evidencecustodianapp
+application_enrollment_secret: evidencecustodianapppw
+application_enrollment_type: client
+application_max_enrollments: 10
+evidencecustodian_ca_name: "EvidenceCustodian CA"
+evidencecustodian_peer_name: "EvidenceCustodian Peer"
+wait_timeout: 600

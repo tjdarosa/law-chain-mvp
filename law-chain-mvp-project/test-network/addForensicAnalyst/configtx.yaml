@@ -1,0 +1,38 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+---
+################################################################################
+#
+#   Section: Organizations
+#
+#   - This section defines the different organizational identities which will
+#   be referenced later in the configuration.
+#
+################################################################################
+Organizations:
+    - &ForensicAnalyst
+        # DefaultOrg defines the organization which is used in the sampleconfig
+        # of the fabric.git development environment
+        Name: ForensicAnalystMSP
+
+        # ID to load the MSP definition as
+        ID: ForensicAnalystMSP
+
+        MSPDir: ../organizations/peerOrganizations/forensicanalyst.example.com/msp
+
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('ForensicAnalystMSP.admin', 'ForensicAnalystMSP.peer', 'ForensicAnalystMSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('ForensicAnalystMSP.admin', 'ForensicAnalystMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('ForensicAnalystMSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('ForensicAnalystMSP.peer')"

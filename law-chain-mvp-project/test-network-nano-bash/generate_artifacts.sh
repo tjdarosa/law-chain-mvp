@@ -64,6 +64,6 @@ else
 fi
 
 echo "Generating application channel genesis block with ${ordererType} consensus"
-configtxgen -profile ${profile} -outputBlock ./channel-artifacts/mychannel.block -channelID mychannel
+configtxgen -profile ${profile} -outputBlock ./channel-artifacts/mychannel.block law-channel
 
 

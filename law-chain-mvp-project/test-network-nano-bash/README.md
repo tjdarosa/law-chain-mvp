@@ -214,9 +214,9 @@ See the [fabric-builder-k8s](https://github.com/hyperledger-labs/fabric-builder-
 Using the peer1 admin, approve and commit the chaincode (only a single approver is required based on the lifecycle endorsement policy of any organization):
 
 ```shell
-peer lifecycle chaincode approveformyorg -o 127.0.0.1:6050 --channelID mychannel --name basic --version 1 --package-id $CHAINCODE_ID --sequence 1 --tls --cafile ${PWD}/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
+peer lifecycle chaincode approveformyorg -o 127.0.0.1:6050 -law-channel --name basic --version 1 --package-id $CHAINCODE_ID --sequence 1 --tls --cafile ${PWD}/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
 
-peer lifecycle chaincode commit -o 127.0.0.1:6050 --channelID mychannel --name basic --version 1 --sequence 1 --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
+peer lifecycle chaincode commit -o 127.0.0.1:6050 -law-channel --name basic --version 1 --sequence 1 --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
 ```
 
 **Note:** after following the instructions above, the chaincode will only be installed on peer1 and will only be available in the peer1admin shell.

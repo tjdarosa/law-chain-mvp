@@ -19,10 +19,10 @@ then
     fi
 fi
 
-osnadmin channel join --channelID mychannel --config-block ./channel-artifacts/mychannel.block -o localhost:9443
-osnadmin channel join --channelID mychannel --config-block ./channel-artifacts/mychannel.block -o localhost:9444
-osnadmin channel join --channelID mychannel --config-block ./channel-artifacts/mychannel.block -o localhost:9445
+osnadmin channel join -law-channel --config-block ./channel-artifacts/mychannel.block -o localhost:9443
+osnadmin channel join -law-channel --config-block ./channel-artifacts/mychannel.block -o localhost:9444
+osnadmin channel join -law-channel --config-block ./channel-artifacts/mychannel.block -o localhost:9445
 
 if [ "$ORDERER_CONSENSUS_TYPE" = "BFT" ]; then
-  osnadmin channel join --channelID mychannel --config-block ./channel-artifacts/mychannel.block -o localhost:9446
+  osnadmin channel join -law-channel --config-block ./channel-artifacts/mychannel.block -o localhost:9446
 fi

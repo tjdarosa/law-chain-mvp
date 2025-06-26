@@ -39,7 +39,7 @@ The Fabric test network is used to deploy and run this sample. Follow these step
 1. Create the test network and a channel (from the `test-network` folder).
 
    ```
-   ./network.sh up createChannel -c mychannel -ca
+   ./network.sh up createChannel -c law-channel -ca
    ```
 
 1. Deploy one of the smart contract implementations (from the `test-network` folder).

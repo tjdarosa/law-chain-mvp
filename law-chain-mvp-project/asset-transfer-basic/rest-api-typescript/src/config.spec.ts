@@ -263,9 +263,9 @@ describe('Config values', () => {
     });
 
     describe('channelName', () => {
-        it('defaults to "mychannel"', () => {
+        it('defaults to "law-channel"', () => {
             const config = require('./config');
-            expect(config.channelName).toBe('mychannel');
+            expect(config.channelName).toBe('law-channel');
         });
 
         it('can be configured using the "HLF_CHANNEL_NAME" environment variable', () => {

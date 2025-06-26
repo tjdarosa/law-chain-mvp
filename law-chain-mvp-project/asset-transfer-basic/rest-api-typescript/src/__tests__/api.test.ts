@@ -690,7 +690,7 @@ describe('Asset Transfer Besic REST API', () => {
 
         it('GET should respond with 404 not found json when there is no transaction with the specified ID', async () => {
             mockGetTransactionByIDTransaction.evaluate
-                .calledWith('mychannel', 'txn3')
+                .calledWith('law-channel', 'txn3')
                 .mockRejectedValue(
                     new Error(
                         'Failed to get transaction with id txn3, error Entry not found in index'
@@ -722,7 +722,7 @@ describe('Asset Transfer Besic REST API', () => {
                 ).finish()
             );
             mockGetTransactionByIDTransaction.evaluate
-                .calledWith('mychannel', 'txn2')
+                .calledWith('law-channel', 'txn2')
                 .mockResolvedValue(processedTransactionBuffer);
 
             const response = await request(app)

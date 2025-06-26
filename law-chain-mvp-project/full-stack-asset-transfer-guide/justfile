@@ -229,9 +229,9 @@ debugcc:
 
     set -x && peer lifecycle chaincode install asset-transfer.tgz &&     { set +x; } 2>/dev/null
     echo
-    set -x && peer lifecycle chaincode approveformyorg --channelID mychannel -o $ORDERER_ENDPOINT --name asset-transfer -v 0 --package-id $CHAINCODE_ID --sequence 1 --connTimeout 15s && { set +x; } 2>/dev/null
+    set -x && peer lifecycle chaincode approveformyorg -law-channel -o $ORDERER_ENDPOINT --name asset-transfer -v 0 --package-id $CHAINCODE_ID --sequence 1 --connTimeout 15s && { set +x; } 2>/dev/null
     echo
-    set -x && peer lifecycle chaincode commit --channelID mychannel -o $ORDERER_ENDPOINT --name asset-transfer -v 0 --sequence 1  --connTimeout 15s && { set +x; } 2>/dev/null
+    set -x && peer lifecycle chaincode commit -law-channel -o $ORDERER_ENDPOINT --name asset-transfer -v 0 --sequence 1  --connTimeout 15s && { set +x; } 2>/dev/null
     echo
     set -x && peer lifecycle chaincode querycommitted --channelID=mychannel && { set +x; } 2>/dev/null
     echo

@@ -2,7 +2,7 @@
 
 source scripts/utils.sh
 
-CHANNEL_NAME=${1:-"mychannel"}
+CHANNEL_NAME=${1:-"law-channel"}
 CC_NAME=${2}
 CC_SRC_PATH=${3}
 CC_SRC_LANGUAGE=${4}
@@ -78,6 +78,12 @@ infoln "Installing chaincode on peer0.collectingofficer..."
 installChaincode 1
 infoln "Install chaincode on peer0.evidencecustodian..."
 installChaincode 2
+infoln "Install chaincode on peer0.forensicanalyst..."
+installChaincode 3
+infoln "Install chaincode on peer0.prosecutor..."
+installChaincode 4
+infoln "Install chaincode on peer0.courtroompersonnel..."
+installChaincode 5
 
 resolveSequence
 
@@ -89,30 +95,72 @@ approveForMyOrg 1
 
 ## check whether the chaincode definition is ready to be committed
 ## expect collectingofficer to have approved and evidencecustodian not to
-checkCommitReadiness 1 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": false"
-checkCommitReadiness 2 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": false"
+checkCommitReadiness 1 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": false" #"\"ForensicAnalyst\": false" "\"Prosecutor\": false" "\"CourtroomPersonnel\": false"
+checkCommitReadiness 2 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": false" #"\"ForensicAnalyst\": false" "\"Prosecutor\": false" "\"CourtroomPersonnel\": false"
+checkCommitReadiness 3 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": false" #"\"ForensicAnalyst\": false" "\"Prosecutor\": false" "\"CourtroomPersonnel\": false"
+checkCommitReadiness 4 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": false" #"\"ForensicAnalyst\": false" "\"Prosecutor\": false" "\"CourtroomPersonnel\": false"
+checkCommitReadiness 5 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": false" #"\"ForensicAnalyst\": false" "\"Prosecutor\": false" "\"CourtroomPersonnel\": false"
 
 ## now approve also for evidencecustodian
 approveForMyOrg 2
 
 ## check whether the chaincode definition is ready to be committed
 ## expect them both to have approved
-checkCommitReadiness 1 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true"
-checkCommitReadiness 2 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true"
+checkCommitReadiness 1 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": false" "\"Prosecutor\": false" "\"CourtroomPersonnel\": false" 
+checkCommitReadiness 2 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": false" "\"Prosecutor\": false" "\"CourtroomPersonnel\": false" 
+checkCommitReadiness 3 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": false" "\"Prosecutor\": false" "\"CourtroomPersonnel\": false" 
+checkCommitReadiness 4 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": false" "\"Prosecutor\": false" "\"CourtroomPersonnel\": false" 
+checkCommitReadiness 5 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": false" "\"Prosecutor\": false" "\"CourtroomPersonnel\": false"
+
+## approve the definition for forensicanalyst
+approveForMyOrg 3
+
+## check whether the chaincode definition is ready to be committed
+## expect collectingofficer to have approved and evidencecustodian not to
+checkCommitReadiness 1 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": true" "\"Prosecutor\": false" "\"CourtroomPersonnel\": false"
+checkCommitReadiness 2 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": true" "\"Prosecutor\": false" "\"CourtroomPersonnel\": false"
+checkCommitReadiness 3 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": true" "\"Prosecutor\": false" "\"CourtroomPersonnel\": false"
+checkCommitReadiness 4 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": true" "\"Prosecutor\": false" "\"CourtroomPersonnel\": false"
+checkCommitReadiness 5 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": true" "\"Prosecutor\": false" "\"CourtroomPersonnel\": false"
+
+## approve the definition for prosecutor
+approveForMyOrg 4
+
+## check whether the chaincode definition is ready to be committed
+## expect collectingofficer to have approved and evidencecustodian not to
+checkCommitReadiness 1 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": true" "\"Prosecutor\": true" "\"CourtroomPersonnel\": false"
+checkCommitReadiness 2 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": true" "\"Prosecutor\": true" "\"CourtroomPersonnel\": false"
+checkCommitReadiness 3 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": true" "\"Prosecutor\": true" "\"CourtroomPersonnel\": false"
+checkCommitReadiness 4 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": true" "\"Prosecutor\": true" "\"CourtroomPersonnel\": false"
+checkCommitReadiness 5 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": true" "\"Prosecutor\": true" "\"CourtroomPersonnel\": false"
+
+## approve the definition for courtroompersonnel
+approveForMyOrg 5
+
+## check whether the chaincode definition is ready to be committed
+## expect collectingofficer to have approved and evidencecustodian not to
+checkCommitReadiness 1 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": true" "\"Prosecutor\": true" "\"CourtroomPersonnel\": true"
+checkCommitReadiness 2 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": true" "\"Prosecutor\": true" "\"CourtroomPersonnel\": true"
+checkCommitReadiness 3 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": true" "\"Prosecutor\": true" "\"CourtroomPersonnel\": true"
+checkCommitReadiness 4 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": true" "\"Prosecutor\": true" "\"CourtroomPersonnel\": true"
+checkCommitReadiness 5 "\"CollectingOfficerMSP\": true" "\"EvidenceCustodianMSP\": true" #"\"ForensicAnalyst\": true" "\"Prosecutor\": true" "\"CourtroomPersonnel\": true"
 
 ## now that we know for sure both orgs have approved, commit the definition
-commitChaincodeDefinition 1 2
+commitChaincodeDefinition 1 2 3 4 5
 
 ## query on both orgs to see that the definition committed successfully
 queryCommitted 1
 queryCommitted 2
+queryCommitted 3
+queryCommitted 4
+queryCommitted 5
 
 ## Invoke the chaincode - this does require that the chaincode have the 'initLedger'
 ## method defined
 if [ "$CC_INIT_FCN" = "NA" ]; then
   infoln "Chaincode initialization is not required"
 else
-  chaincodeInvokeInit 1 2
+  chaincodeInvokeInit 1 2 3 4 5
 fi
 
 exit 0

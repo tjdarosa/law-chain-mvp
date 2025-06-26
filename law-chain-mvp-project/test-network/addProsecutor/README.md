@@ -10,7 +10,7 @@ cd addProsecutor
 ./addProsecutor.sh up
 ```
 
-If you used `network.sh` to create a channel other than the default `mychannel`, you need pass that name to the `addprosecutor.sh` script.
+If you used `network.sh` to create a channel other than the default `law-channel`, you need pass that name to the `addprosecutor.sh` script.
 ```
 ./network.sh up createChannel -c channel1
 cd addProsecutor

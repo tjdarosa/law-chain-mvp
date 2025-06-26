@@ -22,7 +22,7 @@ curl --request POST \
   --url http://localhost:3000/invoke \
   --header 'content-type: application/x-www-form-urlencoded' \
   --data = \
-  --data channelid=mychannel \
+  --data channelid=law-channel \
   --data chaincodeid=basic \
   --data function=createAsset \
   --data args=Asset123 \
@@ -35,5 +35,5 @@ Sample chaincode query for getting asset details.
 
 ``` sh
 curl --request GET \
-  --url 'http://localhost:3000/query?channelid=mychannel&chaincodeid=basic&function=ReadAsset&args=Asset123' 
+  --url 'http://localhost:3000/query?channelid=law-channel&chaincodeid=basic&function=ReadAsset&args=Asset123' 
   ```

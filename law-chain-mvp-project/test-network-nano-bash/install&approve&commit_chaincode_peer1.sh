@@ -18,5 +18,5 @@ CHAINCODE_ID=$(peer lifecycle chaincode calculatepackageid basic.tar.gz)
 export CHAINCODE_ID
 
 # Approve the chaincode using Peer1Admin
-peer lifecycle chaincode approveformyorg -o 127.0.0.1:6050 --channelID mychannel --name basic --version 1 --package-id "${CHAINCODE_ID}" --sequence 1 --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt >> ./logs/install\&approve\&commit_chaincode_peer_1.log 2>&1
-peer lifecycle chaincode commit -o 127.0.0.1:6050 --channelID mychannel --name basic --version 1 --sequence 1 --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt >> ./logs/install\&approve\&commit_chaincode_peer_1.log 2>&1
+peer lifecycle chaincode approveformyorg -o 127.0.0.1:6050 -law-channel --name basic --version 1 --package-id "${CHAINCODE_ID}" --sequence 1 --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt >> ./logs/install\&approve\&commit_chaincode_peer_1.log 2>&1
+peer lifecycle chaincode commit -o 127.0.0.1:6050 -law-channel --name basic --version 1 --sequence 1 --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt >> ./logs/install\&approve\&commit_chaincode_peer_1.log 2>&1

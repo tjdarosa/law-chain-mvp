@@ -87,7 +87,7 @@ parsePeerConnectionParameters() {
     PEER_CONN_PARMS=("${PEER_CONN_PARMS[@]}" --peerAddresses $CORE_PEER_ADDRESS)
     ## Set path to TLS certificate
     CA=PEER0_ORG$1_CA
-    TLSINFO=(--tlsRootCertFiles "${!CA}")
+    TLSINFO=(--tlsRootCertFiles "${CORE_PEER_TLS_ROOTCERT_FILE}")
     PEER_CONN_PARMS=("${PEER_CONN_PARMS[@]}" "${TLSINFO[@]}")
     # shift by one to get to the next organization
     shift

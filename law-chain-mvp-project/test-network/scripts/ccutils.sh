@@ -83,6 +83,7 @@ function commitChaincodeDefinition() {
   # peer (if join was successful), let's supply it directly as we know
   # it using the "-o" option
   set -x
+  echo "PEER_CONN_PARAMS ---> ${PEER_CONN_PARMS[@]}"
   peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "$ORDERER_CA" --channelID $CHANNEL_NAME --name ${CC_NAME} "${PEER_CONN_PARMS[@]}" --version ${CC_VERSION} --sequence ${CC_SEQUENCE} ${INIT_REQUIRED} ${CC_END_POLICY} ${CC_COLL_CONFIG} >&log.txt
   res=$?
   { set +x; } 2>/dev/null

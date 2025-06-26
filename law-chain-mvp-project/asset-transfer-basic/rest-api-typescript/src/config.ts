@@ -135,8 +135,8 @@ export const mspIdEvidenceCustodian = env
  */
 export const channelName = env
     .get('HLF_CHANNEL_NAME')
-    .default('mychannel')
-    .example('mychannel')
+    .default('law-channel')
+    .example('law-channel')
     .asString();
 
 /**

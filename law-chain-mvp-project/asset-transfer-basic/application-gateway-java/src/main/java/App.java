@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 public final class App {
 	private static final String MSP_ID = System.getenv().getOrDefault("MSP_ID", "CollectingOfficerMSP");
-	private static final String CHANNEL_NAME = System.getenv().getOrDefault("CHANNEL_NAME", "mychannel");
+	private static final String CHANNEL_NAME = System.getenv().getOrDefault("CHANNEL_NAME", "law-channel");
 	private static final String CHAINCODE_NAME = System.getenv().getOrDefault("CHAINCODE_NAME", "basic");
 
 	// Path to crypto materials.

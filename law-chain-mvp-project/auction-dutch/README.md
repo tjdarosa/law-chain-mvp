@@ -82,7 +82,7 @@ export CC_PACKAGE_ID=auction_1:8f0d6b6b5a616a1c2b6a9268418f2ee65718acc3c07ea12e1
 
 You can now approve the auction chaincode for Org3:
 ```
-peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" --channelID mychannel --name auction --version 1.0 --package-id $CC_PACKAGE_ID --sequence 1 --signature-policy "OR('CollectingOfficerMSP.peer','EvidenceCustodianMSP.peer')"
+peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -law-channel --name auction --version 1.0 --package-id $CC_PACKAGE_ID --sequence 1 --signature-policy "OR('CollectingOfficerMSP.peer','EvidenceCustodianMSP.peer')"
 ```
 
 The command will start the dutch auction chaincode on the Org3 peer. Note that we did not update the endorsement policy before we added the auditor organization. Only CollectingOfficer and EvidenceCustodian will be able create an auction. The auditor is added the endorsement policy after the auction is created. Because the auditor does not need to create an auction or create new bids, the auditor can run a different version of the smart contract than the auction participants. The auditor version of the smart contract also adds logic to check that the request is submitted by one of the auction participants before the auditor can intervene.

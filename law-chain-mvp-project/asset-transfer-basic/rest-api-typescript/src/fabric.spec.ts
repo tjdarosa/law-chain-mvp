@@ -304,7 +304,7 @@ describe('Fabric', () => {
             );
             const mockContract = mock<Contract>();
             mockContract.evaluateTransaction
-                .calledWith('GetChainInfo', 'mychannel')
+                .calledWith('GetChainInfo', 'law-channel')
                 .mockResolvedValue(mockBlockchainInfoBuffer);
 
             const result = (await getBlockHeight(mockContract)) as Long;
